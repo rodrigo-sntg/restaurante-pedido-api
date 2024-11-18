@@ -11,16 +11,17 @@ public class RegrasInicioPedidoUseCase implements RegrasStatus {
 
 	@Override
 	public void executarRegras(Pedido pedido) {
-		pedido.iniciarPedido(LocalDateTime.now());
-
 		ValidadorHelper.validar(pedido.getItens(),
 				() -> new PedidoInvalidoException("Deve ser informado pelo menos um item no pedido!"));
-
-		ValidadorHelper.validar(pedido.getDataCriacao(),
-				() -> new PedidoInvalidoException("A data do pedido deve ser informada!"));
 
 		pedido.getItens()
 				.forEach(item -> ValidadorHelper.validar(item.getCodigoProduto(),
 						() -> new ItemPedidoInvalidoException("O Item do pedido deve ter um produto!")));
+
+		pedido.iniciarPedido(LocalDateTime.now());
+
+		//		ValidadorHelper.validar(pedido.getDataCriacao(),
+		//				() -> new PedidoInvalidoException("A data do pedido deve ser informada!"));
+
 	}
 }

@@ -104,8 +104,6 @@ public class PedidoControllerImpl implements PedidoController {
 	}
 
 	private Optional<StatusPedido> toStatusPedido(String status) {
-		if (status == null)
-			return Optional.empty();
 		return Arrays.stream(StatusPedido.values())
 				.filter(item -> item.name()
 						.equalsIgnoreCase(status))

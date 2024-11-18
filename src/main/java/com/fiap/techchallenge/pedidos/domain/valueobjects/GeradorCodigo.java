@@ -1,4 +1,4 @@
-package com.fiap.techchallenge.pedidos.application.usecase;
+package com.fiap.techchallenge.pedidos.domain.valueobjects;
 
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
