@@ -1,6 +1,7 @@
 package com.fiap.techchallenge.pedidos.domain.model;
 
 import com.fiap.techchallenge.pedidos.domain.valueobjects.FormaPagamento;
+import com.fiap.techchallenge.pedidos.domain.valueobjects.GeradorCodigo;
 import com.fiap.techchallenge.pedidos.domain.valueobjects.IStatusPedido;
 import com.fiap.techchallenge.pedidos.domain.valueobjects.RegrasStatus;
 import com.fiap.techchallenge.pedidos.domain.valueobjects.StatusAguardandoPagamento;
@@ -8,6 +9,7 @@ import com.fiap.techchallenge.pedidos.domain.valueobjects.StatusPedido;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -61,13 +63,14 @@ public class Pedido {
 
 	}
 
-	public double calcularTotal() {
+	public double calcularTotal()  {
 		return itens.stream()
 				.map(ItemPedido::getValorItem)
 				.reduce(0d, Double::sum);
 	}
 
 	public void iniciarPedido(LocalDateTime dataInicio) {
+		this.codigoPedido = GeradorCodigo.gerar(RandomStringUtils.randomAlphabetic(5));
 		this.dataCriacao = dataInicio;
 		this.dataAlteracao = dataInicio;
 		this.total = this.calcularTotal();

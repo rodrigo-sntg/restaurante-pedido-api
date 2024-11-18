@@ -4,6 +4,7 @@ import com.fiap.techchallenge.pedidos.application.controller.PedidoController;
 import com.fiap.techchallenge.pedidos.application.controller.dto.CadastroPedidoDTO;
 import com.fiap.techchallenge.pedidos.application.controller.dto.PedidoDTO;
 import com.fiap.techchallenge.pedidos.domain.exceptions.PedidoInvalidoException;
+import com.fiap.techchallenge.pedidos.domain.exceptions.PedidoNaoEncontradoException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -51,7 +52,7 @@ public class PedidoApi {
 			@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos") })
 	public ResponseEntity<PedidoDTO> buscarPedido(@PathVariable("codigo") String codigo) {
 		var pedido = pedidoController.buscarPedidoPeloCodigo(codigo)
-				.orElseThrow(() -> new PedidoInvalidoException(
+				.orElseThrow(() -> new PedidoNaoEncontradoException(
 						"Não foi possível encontrar o pedido com esse id: " + codigo));
 		return ResponseEntity.ok(pedido);
 	}

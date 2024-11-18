@@ -1,7 +1,10 @@
 package com.fiap.techchallenge.pedidos.domain.valueobjects;
 
+import lombok.EqualsAndHashCode;
+
 import java.util.Objects;
 
+@EqualsAndHashCode
 public class Preco {
 	private final Double valor;
 
@@ -12,18 +15,4 @@ public class Preco {
 	public Double getValor() {
 		return valor;
 	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		Preco preco = (Preco) o;
-		return valor.equals(preco.valor);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(valor);
-	}
-
 }

@@ -55,15 +55,13 @@ public class CadastroPedidoUseCase {
 	public ItemPedido toItemPedido(CadastroItemPedidoDTO cadastroItemPedidoDTO) {
 		if (Objects.isNull(cadastroItemPedidoDTO.getCodigoProduto()))
 			throw new PedidoInvalidoException("O produto deve ser informado!");
-		try {
-			ProdutoDTO produto = produtoGateway.buscarProdutoPeloCodigo(cadastroItemPedidoDTO.getCodigoProduto());
-			Preco preco = new Preco(produto.getPreco());
-			return new ItemPedido(cadastroItemPedidoDTO.getCustomizacao(), cadastroItemPedidoDTO.getCodigoProduto(),
-					preco, produto.getTempoPreparoEmMinutos());
-		} catch (Exception e) {
+		ProdutoDTO produto = produtoGateway.buscarProdutoPeloCodigo(cadastroItemPedidoDTO.getCodigoProduto());
+		if (produto == null)
 			throw new PedidoInvalidoException(
 					"Produto com o id: " + cadastroItemPedidoDTO.getCodigoProduto() + " não localizado!");
-		}
+		Preco preco = new Preco(produto.getPreco());
+		return new ItemPedido(cadastroItemPedidoDTO.getCustomizacao(), cadastroItemPedidoDTO.getCodigoProduto(), preco,
+				produto.getTempoPreparoEmMinutos());
 	}
 
 	public List<ItemPedido> toItemPedido(List<CadastroItemPedidoDTO> itensPedidoDTO) {
