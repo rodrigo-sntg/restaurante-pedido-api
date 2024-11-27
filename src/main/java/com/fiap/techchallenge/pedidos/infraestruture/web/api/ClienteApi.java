@@ -36,6 +36,7 @@ public class ClienteApi {
 			@ApiResponse(responseCode = "200", description = "Cliente criado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ClienteDTO.class), examples = @ExampleObject(name = "Exemplo de Cliente", value = "{\"nome\": \"João Silva\", \"cpf\": \"12345678900\", \"email\": \"joao.silva@example.com\"}"))),
 			@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos") })
 	public ResponseEntity<ClienteDTO> criarCliente(@Valid @RequestBody ClienteDTO clienteDTO) {
+
 		return ResponseEntity.ok(clienteController.criarCliente(clienteDTO));
 	}
 
