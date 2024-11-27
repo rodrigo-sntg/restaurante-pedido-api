@@ -14,22 +14,28 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: '17'
+      - name: Install xmlstarlet
+        run: sudo apt-get install -y xmlstarlet
+
       - name: Run Coverage
         run: ./mvnw clean test jacoco:report
 
       - name: Check Coverage
         run: |
-          # Extrair cobertura total do arquivo de relatório do JaCoCo
-          COVERAGE=$(grep -oP '(?<=<counter type="INSTRUCTION" missed=")[^"]+' target/site/jacoco/jacoco.xml)
-          COVERED=$(grep -oP '(?<=<counter type="INSTRUCTION" covered=")[^"]+' target/site/jacoco/jacoco.xml)
-          TOTAL=$((COVERED + COVERAGE))
+        # Usar xmlstarlet para extrair os valores de cobertura e não cobertura
+          COVERED=$(xmlstarlet sel -t -v "//*[name()='counter' and @type='INSTRUCTION']/@covered" target/site/jacoco/jacoco.xml)
+          MISSED=$(xmlstarlet sel -t -v "//*[name()='counter' and @type='INSTRUCTION']/@missed" target/site/jacoco/jacoco.xml)
+
+       # Calcular a cobertura total
+          TOTAL=$((COVERED + MISSED))
           PERCENTAGE=$((100 * COVERED / TOTAL))
-          
+
           echo "Cobertura: $PERCENTAGE%"
-          
+
+          # Validar se a cobertura é maior que 80%
           if [ "$PERCENTAGE" -lt 80 ]; then
             echo "Cobertura abaixo de 80%! ($PERCENTAGE%)"
             exit 1
           else
             echo "Cobertura aceita: $PERCENTAGE%"
-          ficore.setFailed('Overall coverage is less than 80%!')
+          fi
