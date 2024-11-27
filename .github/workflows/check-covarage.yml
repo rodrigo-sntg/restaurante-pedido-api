@@ -22,16 +22,16 @@ jobs:
 
       - name: Check Coverage
         run: |
-        # Usar xmlstarlet para extrair os valores de cobertura e não cobertura
+          # Usar xmlstarlet para extrair os valores de cobertura e não cobertura
           COVERED=$(xmlstarlet sel -t -v "//*[name()='counter' and @type='INSTRUCTION']/@covered" target/site/jacoco/jacoco.xml)
           MISSED=$(xmlstarlet sel -t -v "//*[name()='counter' and @type='INSTRUCTION']/@missed" target/site/jacoco/jacoco.xml)
-
-       # Calcular a cobertura total
+          
+          # Calcular a cobertura total
           TOTAL=$((COVERED + MISSED))
           PERCENTAGE=$((100 * COVERED / TOTAL))
-
+          
           echo "Cobertura: $PERCENTAGE%"
-
+          
           # Validar se a cobertura é maior que 80%
           if [ "$PERCENTAGE" -lt 80 ]; then
             echo "Cobertura abaixo de 80%! ($PERCENTAGE%)"
