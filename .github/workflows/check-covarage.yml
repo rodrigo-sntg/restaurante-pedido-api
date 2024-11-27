@@ -15,12 +15,22 @@ jobs:
         with:
           java-version: 17
       - name: Run Coverage
-        run: |
-          ./mvnw test jacoco:report
+        run: mvn clean test jacoco:report
 
-      - name: Fail PR if overall coverage is less than 80%
-        if: ${{ steps.jacoco.outputs.coverage-overall < 80.0 }}
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.setFailed('Overall coverage is less than 80%!')
+
+      - name: Check Coverage
+        run: |
+          # Extrair cobertura total do arquivo de relatório do JaCoCo
+          COVERAGE=$(grep -oP '(?<=<counter type="INSTRUCTION" missed=")[^"]+' target/site/jacoco/jacoco.xml)
+          COVERED=$(grep -oP '(?<=<counter type="INSTRUCTION" covered=")[^"]+' target/site/jacoco/jacoco.xml)
+          TOTAL=$((COVERED + COVERAGE))
+          PERCENTAGE=$((100 * COVERED / TOTAL))
+          
+          echo "Cobertura: $PERCENTAGE%"
+          
+          if [ "$PERCENTAGE" -lt 80 ]; then
+            echo "Cobertura abaixo de 80%! ($PERCENTAGE%)"
+            exit 1
+          else
+            echo "Cobertura aceita: $PERCENTAGE%"
+          ficore.setFailed('Overall coverage is less than 80%!')
