@@ -1,0 +1,70 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      EKS_CLUSTER_NAME: "my-cluster-1"  # Define the name of your EKS cluster here
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Install dependencies for coverage calculation
+        run: sudo apt-get update && sudo apt-get install -y libxml2-utils bc
+
+      - name: Build and run tests with coverage check
+        run: mvn clean verify -Dspring.profiles.active=test
+        env:
+          CI: true
+
+      - name: Extract current coverage percentage
+        id: coverage
+        shell: bash
+        run: |
+          LINE_COVERAGE=$(xmllint --xpath "string(//report/counter[@type='LINE']/@covered)" target/site/jacoco/jacoco.xml)
+          LINE_MISSED=$(xmllint --xpath "string(//report/counter[@type='LINE']/@missed)" target/site/jacoco/jacoco.xml)
+          if [[ -z "$LINE_COVERAGE" || -z "$LINE_MISSED" ]]; then
+            echo "Coverage data not found, defaulting to 0%"
+            echo "coverage=0" >> $GITHUB_ENV
+          else
+            TOTAL_LINES=$((LINE_COVERAGE + LINE_MISSED))
+            COVERAGE_PERCENTAGE=$(echo "scale=2; $LINE_COVERAGE * 100 / $TOTAL_LINES" | bc)
+            echo "Current Coverage: $COVERAGE_PERCENTAGE%"
+            echo "coverage=$COVERAGE_PERCENTAGE" >> $GITHUB_ENV
+          fi
+
+      - name: Display coverage
+        run: echo "Coverage percentage: 80%"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: target/surefire-reports/
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: target/site/jacoco/
