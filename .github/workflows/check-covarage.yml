@@ -1,41 +1,42 @@
-name: Check Test Coverage
+name: Measure code coverage
+
 on:
   pull_request:
-#    branchs:
-#      - main
+
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Set up JDK 17
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
           java-version: '17'
-      - name: Install xmlstarlet
-        run: sudo apt-get install -y xmlstarlet
 
-      - name: Run Coverage
-        run: ./mvnw clean test jacoco:report
+      - name: Build and Test
+        if: always()
+        run: mvn -B package --file pom.xml
+        continue-on-error: true
 
-      - name: Check Coverage
-        run: |
-          # Usar xmlstarlet para extrair os valores de cobertura e não cobertura
-          COVERED=$(xmlstarlet sel -t -v "//*[name()='counter' and @type='INSTRUCTION']/@covered" target/site/jacoco/jacoco.xml)
-          MISSED=$(xmlstarlet sel -t -v "//*[name()='counter' and @type='INSTRUCTION']/@missed" target/site/jacoco/jacoco.xml)
-          
-          # Calcular a cobertura total
-          TOTAL=$((COVERED + MISSED))
-          PERCENTAGE=$((100 * COVERED / TOTAL))
-          
-          echo "Cobertura: $PERCENTAGE%"
-          
-          # Validar se a cobertura é maior que 80%
-          if [ "$PERCENTAGE" -lt 80 ]; then
-            echo "Cobertura abaixo de 80%! ($PERCENTAGE%)"
-            exit 1
-          else
-            echo "Cobertura aceita: $PERCENTAGE%"
-          fi
+      - name: Upload Report
+        uses: 'actions/upload-artifact@v3'
+        with:
+          name: jacoco-report
+          path: |
+            ${{ github.workspace }}/target/site/jacoco/jacoco.xml
+            ${{ github.workspace }}/target/site/jacoco/index.html
+
+      - name: Add coverage to PR
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          paths: ${{ github.workspace }}/target/site/jacoco/jacoco.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 80
+          min-coverage-changed-files: 80
+          title: '# :recycle: Coverage Report'
+          update-comment: true
+          pass-emoji: ':green_circle:'
+          fail-emoji: ':red_circle:'
