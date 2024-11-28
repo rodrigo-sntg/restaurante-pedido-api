@@ -1,6 +1,7 @@
 package com.fiap.techchallenge.pedidos.infraestruture.web.externalapi;
 
 import com.fiap.techchallenge.pedidos.application.controller.dto.ProdutoDTO;
+import com.fiap.techchallenge.pedidos.infraestruture.configuration.ExternalApiRoutes;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,9 @@ public class ProdutoExternalGatewayImplTest {
 	private ProdutoExternalGatewayImpl produtoExternalGateway;
 	@Mock
 	private RestTemplate restTemplate;
+	@Mock
+	private ExternalApiRoutes externalApiRoutes;
+
 
 	@BeforeEach
 	void setup() {
@@ -46,6 +50,7 @@ public class ProdutoExternalGatewayImplTest {
 		ResponseEntity responseEntity = new ResponseEntity<>(produto, null, 200);
 
 		when(restTemplate.getForEntity(anyString(), any())).thenReturn(responseEntity);
+		when(externalApiRoutes.getProdutoApiUrl()).thenReturn("http://localhost:8080/produtos");
 
 		ProdutoDTO dto = produtoExternalGateway.buscarProdutoPeloCodigo("XPTO");
 

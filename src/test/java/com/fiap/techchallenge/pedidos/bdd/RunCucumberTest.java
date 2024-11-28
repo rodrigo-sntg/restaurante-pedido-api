@@ -7,6 +7,6 @@ import org.junit.platform.suite.api.Suite;
 @Suite
 @IncludeEngines("cucumber")
 @SelectClasspathResource("features")
-@SelectClasspathResource("com.fiap.techchallenge.pedidoss.bdd")
-public class RunCumcumberTest {
+@SelectClasspathResource("com.fiap.techchallenge.pedidos.bdd")
+public class RunCucumberTest {
 }
