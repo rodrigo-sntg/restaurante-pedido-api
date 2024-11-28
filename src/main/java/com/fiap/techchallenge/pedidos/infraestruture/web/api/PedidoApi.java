@@ -42,8 +42,8 @@ public class PedidoApi {
 			@ApiResponse(responseCode = "200", description = "Pedido criado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class), examples = @ExampleObject(name = "Exemplo de Pedido", value = "{\"itens\": [{\"customizacao\": \"Sem cebola\", \"codigoProduto\": \"PROD123\"}], \"cpf\": \"12345678900\"}"))),
 			@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos") })
 	public ResponseEntity<PedidoDTO> criarPedido(@RequestBody @Valid CadastroPedidoDTO dto) {
-		PedidoDTO pedidoViewModel = pedidoController.criarPedido(dto);
-		return ResponseEntity.ok(pedidoViewModel);
+		PedidoDTO pedidoDTO = pedidoController.criarPedido(dto);
+		return ResponseEntity.ok(pedidoDTO);
 	}
 
 	@GetMapping("/{codigo}")

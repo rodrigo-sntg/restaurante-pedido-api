@@ -2,8 +2,8 @@ package com.fiap.techchallenge.pedidos.infraestruture.web.externalapi;
 
 import com.fiap.techchallenge.pedidos.application.controller.dto.ProdutoDTO;
 import com.fiap.techchallenge.pedidos.application.gateway.ProdutoExternalGateway;
+import com.fiap.techchallenge.pedidos.infraestruture.configuration.ExternalApiRoutes;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -13,11 +13,10 @@ import org.springframework.web.client.RestTemplate;
 public class ProdutoExternalGatewayImpl implements ProdutoExternalGateway {
 	private final RestTemplate restTemplate;
 
-	@Value("${produto.api_url}")
-	private String produtoClient;
+	private final ExternalApiRoutes externalApiRoutes;
 
 	public ProdutoDTO buscarProdutoPeloCodigo(String codigo) {
-		String url = produtoClient + "/produtos/" + codigo;
+		String url = externalApiRoutes.getProdutoApiUrl() + "/produtos/" + codigo;
 		ResponseEntity<ProdutoDTO> response = restTemplate.getForEntity(url, ProdutoDTO.class);
 		return response.getBody();
 	}
