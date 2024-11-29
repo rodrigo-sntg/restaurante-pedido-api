@@ -15,7 +15,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up JDK 21
+      - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
@@ -40,52 +40,3 @@ jobs:
           name: test-results
           path: target/surefire-reports/
 
-      - name: Set up AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-west-2  # Ajuste para a sua região AWS
-          role-to-assume: arn:aws:iam::058264063116:role/github-actions-role
-          role-session-name: github-actions-session
-
-      # Configuração do kubectl para autenticação no cluster EKS
-      - name: Configure kubectl
-        run: |
-          aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }} --region us-east-1
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-          EKS_CLUSTER_NAME: "my-cluster-1"  # Certifique-se de que o nome está correto
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_wrapper: false
-
-      - name: Terraform Init
-        run: terraform init
-        working-directory: ./terraform
-
-      - name: Terraform Apply - Initial
-        run: terraform apply -auto-approve
-        working-directory: ./terraform
-
-      - name: Wait for Load Balancer URL
-        id: load-balancer
-        run: |
-          #!/bin/bash
-          LOAD_BALANCER_URL=$(terraform output -raw app_public_url 2>/dev/null)
-          while [ -z "$LOAD_BALANCER_URL" ]; do
-            echo "Aguardando a URL do LoadBalancer estar disponível..."
-            sleep 10
-            LOAD_BALANCER_URL=$(terraform output -raw app_public_url 2>/dev/null)
-          done
-          echo "Obtained Load Balancer URL: $LOAD_BALANCER_URL"
-          echo "LOAD_BALANCER_URL=$LOAD_BALANCER_URL" >> $GITHUB_ENV
-        working-directory: ./terraform
-
-      - name: Terraform Apply - Final
-        run: terraform apply -auto-approve -var="ngrok_url=http://${{ env.LOAD_BALANCER_URL }}"
-        working-directory: ./terraform
