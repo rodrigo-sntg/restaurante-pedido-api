@@ -1,9 +1,9 @@
 package com.fiap.techchallenge.pedidos.application.usecase;
 
-import com.fiap.techchallenge.pedidos.domain.model.Pedido;
-import com.fiap.techchallenge.pedidos.domain.valueobjects.RegrasStatus;
-import com.fiap.techchallenge.pedidos.domain.valueobjects.StatusPedido;
 import com.fiap.techchallenge.pedidos.application.controller.dto.CadastroPedidoDTO;
+import com.fiap.techchallenge.pedidos.application.controller.dto.CheckoutDTO;
+import com.fiap.techchallenge.pedidos.domain.model.Pedido;
+import com.fiap.techchallenge.pedidos.domain.valueobjects.StatusPedido;
 
 import java.time.LocalDateTime;
 import java.util.EnumSet;
@@ -19,8 +19,6 @@ public interface PedidoUseCase {
 
 	void cancelarPedido(Pedido pedido);
 
-	Pedido avancarStatus(Pedido pedido, RegrasStatus regrasStatusUseCase);
-
 	Pedido avancarStatus(String codigo);
 
 	Pedido voltarStatus(String codigo);
@@ -28,4 +26,6 @@ public interface PedidoUseCase {
 	void verificarEAtualizarStatusDosPedidos(LocalDateTime agora);
 
 	List<Pedido> buscarPedidosPorStatus(EnumSet<StatusPedido> status);
+
+	CheckoutDTO checkout(String codigo);
 }

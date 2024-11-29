@@ -1,6 +1,7 @@
 package com.fiap.techchallenge.pedidos.application.controller;
 
 import com.fiap.techchallenge.pedidos.application.controller.dto.CadastroPedidoDTO;
+import com.fiap.techchallenge.pedidos.application.controller.dto.CheckoutDTO;
 import com.fiap.techchallenge.pedidos.application.controller.dto.PedidoDTO;
 import com.fiap.techchallenge.pedidos.application.presenters.PedidoPresenter;
 import com.fiap.techchallenge.pedidos.application.usecase.PedidoUseCase;
@@ -211,5 +212,20 @@ public class PedidoControllerImplTest {
 		pedidoController.criarPedido(cadastroPedidoDTO);
 		verify(pedidoUseCase).criarPedido(any(CadastroPedidoDTO.class));
 		verify(pedidoPresenter).toModelView(any(Object.class));
+	}
+
+	@Test
+	void shouldFazerCheckout(){
+		var checkout = CheckoutDTO.builder()
+				.id(1l)
+				.payment("CREDIT_CARD")
+				.paymentUrl("http://pagamento-url.com")
+				.referenceId("XPTO")
+				.checkoutId("XPTO")
+				.build();
+
+		when(pedidoUseCase.checkout(any())).thenReturn(checkout);
+		var checkoutDTO = pedidoController.checkout("XPTO");
+		assertEquals(checkoutDTO.getCheckoutId(), checkout.getCheckoutId());
 	}
 }

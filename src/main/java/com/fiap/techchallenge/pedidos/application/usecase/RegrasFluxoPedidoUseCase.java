@@ -8,8 +8,8 @@ import com.fiap.techchallenge.pedidos.domain.valueobjects.StatusPedido;
 public class RegrasFluxoPedidoUseCase implements RegrasStatus {
 	@Override
 	public void executarRegras(Pedido pedido) {
-		if (pedido.getStatusAtual().equals(StatusPedido.AGUARDANDO_PAGAMENTO)
-				|| pedido.getStatusAtual().equals(StatusPedido.PROCESSANDO_PAGAMENTO)) {
+		if (pedido.getStatusAtual()
+				.equals(StatusPedido.AGUARDANDO_PAGAMENTO)) {
 			throw new StatusInvalidoException("Fluxo do status pedido invalido.");
 		}
 	}

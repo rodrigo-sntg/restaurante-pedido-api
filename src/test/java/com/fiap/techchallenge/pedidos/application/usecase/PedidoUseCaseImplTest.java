@@ -2,8 +2,10 @@ package com.fiap.techchallenge.pedidos.application.usecase;
 
 import com.fiap.techchallenge.pedidos.application.controller.dto.CadastroItemPedidoDTO;
 import com.fiap.techchallenge.pedidos.application.controller.dto.CadastroPedidoDTO;
+import com.fiap.techchallenge.pedidos.application.controller.dto.CheckoutDTO;
 import com.fiap.techchallenge.pedidos.application.controller.dto.ProdutoDTO;
 import com.fiap.techchallenge.pedidos.application.gateway.ClienteGateway;
+import com.fiap.techchallenge.pedidos.application.gateway.PagamentoExternalGateway;
 import com.fiap.techchallenge.pedidos.application.gateway.PedidoGateway;
 import com.fiap.techchallenge.pedidos.application.gateway.ProdutoExternalGateway;
 import com.fiap.techchallenge.pedidos.domain.exceptions.PedidoInvalidoException;
@@ -41,6 +43,8 @@ public class PedidoUseCaseImplTest {
 	private ProdutoExternalGateway produtoGateway;
 	@Mock
 	private ClienteGateway clienteGateway;
+	@Mock
+	private PagamentoExternalGateway pagamentoGateway;
 
 	@InjectMocks
 	private PedidoUseCaseImpl pedidoUseCase;
@@ -237,6 +241,32 @@ public class PedidoUseCaseImplTest {
 		assertDoesNotThrow(() -> {
 			pedidoUseCase.verificarEAtualizarStatusDosPedidos(LocalDateTime.of(2024, 1, 1, 0, 10));
 		});
+	}
+
+	@Test
+	void shouldFazerCheckout() {
+		var checkout = CheckoutDTO.builder()
+				.id(1L)
+				.payment("CREDIT_CARD")
+				.paymentUrl("http://pagamento-url.com")
+				.referenceId("XPTO")
+				.checkoutId("XPTO")
+				.build();
+		when(pedidoGateway.buscarPedidoPeloCodigo(anyString())).thenReturn(
+				Optional.of(getPedido(new StatusAguardandoPagamento())));
+		when(pedidoGateway.atualizarStatus(any(Pedido.class))).thenReturn(getPedido(new StatusAguardandoPagamento()));
+		when(pagamentoGateway.fazerCheckout(any(Pedido.class))).thenReturn(checkout);
+		CheckoutDTO resposta = pedidoUseCase.checkout("XPTO");
+		assertEquals(resposta.getCheckoutId(), checkout.getCheckoutId());
+	}
+
+	@Test
+	void shouldFazerCheckout_ThrowsExceptionWhenPedidoNotFound() {
+		when(pedidoGateway.buscarPedidoPeloCodigo(anyString())).thenReturn(Optional.empty());
+		var exception = assertThrows(PedidoInvalidoException.class, () -> {
+			pedidoUseCase.checkout("XPTO");
+		});
+		assertEquals("Pedido não encontrado para o código: (XPTO).", exception.getMessage());
 	}
 
 	private Pedido getPedido(IStatusPedido statusPedido) {

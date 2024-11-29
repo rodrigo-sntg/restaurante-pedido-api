@@ -5,6 +5,7 @@ import com.fiap.techchallenge.pedidos.application.controller.PedidoControllerImp
 import com.fiap.techchallenge.pedidos.application.controller.dto.ClienteDTO;
 import com.fiap.techchallenge.pedidos.application.controller.dto.PedidoDTO;
 import com.fiap.techchallenge.pedidos.application.gateway.ClienteGateway;
+import com.fiap.techchallenge.pedidos.application.gateway.PagamentoExternalGateway;
 import com.fiap.techchallenge.pedidos.application.gateway.PedidoGateway;
 import com.fiap.techchallenge.pedidos.application.gateway.PedidoGatewayImpl;
 import com.fiap.techchallenge.pedidos.application.gateway.ProdutoExternalGateway;
@@ -26,9 +27,11 @@ public class PedidoConfiguration {
 	@Bean
 	public PedidoUseCase pedidoUseCase(PedidoGateway pedidoGateway, //
 			ProdutoExternalGateway produtoGateway, //
+			PagamentoExternalGateway pagamentoGateway, //
 			ClienteGateway clienteGateway) {
 		return new PedidoUseCaseImpl(pedidoGateway, //
 				produtoGateway, //
+				pagamentoGateway, //
 				clienteGateway);
 	}
 

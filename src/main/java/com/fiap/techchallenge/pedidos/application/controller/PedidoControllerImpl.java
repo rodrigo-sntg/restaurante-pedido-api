@@ -1,6 +1,8 @@
 package com.fiap.techchallenge.pedidos.application.controller;
 
 import com.fiap.techchallenge.pedidos.application.controller.dto.CadastroPedidoDTO;
+import com.fiap.techchallenge.pedidos.application.controller.dto.CheckoutDTO;
+import com.fiap.techchallenge.pedidos.application.controller.dto.PedidoCheckoutDTO;
 import com.fiap.techchallenge.pedidos.application.controller.dto.PedidoDTO;
 import com.fiap.techchallenge.pedidos.application.presenters.ApplicationPresenter;
 import com.fiap.techchallenge.pedidos.application.usecase.PedidoUseCase;
@@ -108,5 +110,10 @@ public class PedidoControllerImpl implements PedidoController {
 				.filter(item -> item.name()
 						.equalsIgnoreCase(status))
 				.findFirst();
+	}
+
+	@Override
+	public CheckoutDTO checkout(String codigo) {
+		return pedidoUseCase.checkout(codigo);
 	}
 }
