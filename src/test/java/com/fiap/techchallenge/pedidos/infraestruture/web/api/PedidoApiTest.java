@@ -105,7 +105,6 @@ public class PedidoApiTest {
 			when(pedidoController.buscarPedidoPeloCodigo(any())).thenReturn(Optional.empty());
 
 			mockMvc.perform(get(BASE_URL + "/{codigo}", codigo))
-					.andDo(print())
 					.andExpect(status().isNotFound())
 					.andExpect(content().string("Não foi possível encontrar o pedido com esse id: XPTO"));
 		}

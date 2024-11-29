@@ -1,0 +1,129 @@
+{
+    "uuid": "b00684fa-6f54-441a-b2be-9051198b43de",
+    "lastMigration": 33,
+    "name": "Mock",
+    "endpointPrefix": "",
+    "latency": 0,
+    "port": 8080,
+    "hostname": "",
+    "folders": [],
+    "routes": [
+        {
+            "uuid": "6002ab2f-3e7f-4bb4-be34-baf5c406264d",
+            "type": "http",
+            "documentation": "",
+            "method": "get",
+            "endpoint": "produtos/prod1",
+            "responses": [
+                {
+                    "uuid": "a157ad4e-4c62-425c-9a15-0ac304677043",
+                    "body": "{\n    \"_id\": \"67340b9e284aae7f74ed5445\",\n    \"nome\": \"Pizza Margherita IIIIII\",\n    \"categoria\": \"LANCHE\",\n    \"preco\": 33,\n    \"descricao\": \"Pizza de queijo com molho de tomate\",\n    \"ativo\": true,\n    \"tempoPreparoEmMinutos\": 20,\n    \"imagem\": \"url_da_imagem\",\n    \"codigo\": \"prod1\",\n    \"__v\": 0\n}",
+                    "latency": 0,
+                    "statusCode": 200,
+                    "label": "",
+                    "headers": [],
+                    "bodyType": "INLINE",
+                    "filePath": "",
+                    "databucketID": "",
+                    "sendFileAsBody": false,
+                    "rules": [],
+                    "rulesOperator": "OR",
+                    "disableTemplating": false,
+                    "fallbackTo404": false,
+                    "default": true,
+                    "crudKey": "id",
+                    "callbacks": []
+                }
+            ],
+            "responseMode": null,
+            "streamingMode": null,
+            "streamingInterval": 0
+        },
+        {
+            "uuid": "3f56ebe1-cf90-42a7-91a3-5c81a381da64",
+            "type": "http",
+            "documentation": "",
+            "method": "get",
+            "endpoint": "produtos/prod2",
+            "responses": [
+                {
+                    "uuid": "798db6bf-7c13-47a5-bb6e-ca2b467f6313",
+                    "body": "{\n    \"_id\": \"67340b9e284aae7f74ed5445\",\n    \"nome\": \"Coca cola zero\",\n    \"categoria\": \"BEBIDA\",\n    \"preco\": 33,\n    \"descricao\": \"Coca cola diet\",\n    \"ativo\": true,\n    \"tempoPreparoEmMinutos\": 20,\n    \"imagem\": \"url_da_imagem\",\n    \"codigo\": \"prod2\",\n    \"__v\": 0\n}",
+                    "latency": 0,
+                    "statusCode": 200,
+                    "label": "",
+                    "headers": [],
+                    "bodyType": "INLINE",
+                    "filePath": "",
+                    "databucketID": "",
+                    "sendFileAsBody": false,
+                    "rules": [],
+                    "rulesOperator": "OR",
+                    "disableTemplating": false,
+                    "fallbackTo404": false,
+                    "default": true,
+                    "crudKey": "id",
+                    "callbacks": []
+                }
+            ],
+            "responseMode": null,
+            "streamingMode": null,
+            "streamingInterval": 0
+        }
+    ],
+    "rootChildren": [
+        {
+            "type": "route",
+            "uuid": "6002ab2f-3e7f-4bb4-be34-baf5c406264d"
+        },
+        {
+            "type": "route",
+            "uuid": "3f56ebe1-cf90-42a7-91a3-5c81a381da64"
+        }
+    ],
+    "proxyMode": false,
+    "proxyHost": "",
+    "proxyRemovePrefix": false,
+    "tlsOptions": {
+        "enabled": false,
+        "type": "CERT",
+        "pfxPath": "",
+        "certPath": "",
+        "keyPath": "",
+        "caPath": "",
+        "passphrase": ""
+    },
+    "cors": true,
+    "headers": [
+        {
+            "key": "Content-Type",
+            "value": "application/json"
+        },
+        {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+        },
+        {
+            "key": "Access-Control-Allow-Methods",
+            "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+        },
+        {
+            "key": "Access-Control-Allow-Headers",
+            "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+        }
+    ],
+    "proxyReqHeaders": [
+        {
+            "key": "",
+            "value": ""
+        }
+    ],
+    "proxyResHeaders": [
+        {
+            "key": "",
+            "value": ""
+        }
+    ],
+    "data": [],
+    "callbacks": []
+}

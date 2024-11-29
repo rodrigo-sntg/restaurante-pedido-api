@@ -14,7 +14,7 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 
 public class PedidoSteps {
-	private static final String BASE_URL = "http://localhost:8080/pedidos";
+	private static final String BASE_URL = "http://localhost:8080/api/pedidos";
 	private CadastroPedidoDTO pedido;
 	private List<CadastroItemPedidoDTO> itensPedido;
 	private Response response;
@@ -30,12 +30,12 @@ public class PedidoSteps {
 	@Quando("eu adiciono itens ao pedido")
 	public void eu_adiciono_itens_ao_pedido() {
 		itensPedido.add(CadastroItemPedidoDTO.builder()
-				.codigoProduto("PROD123")
+				.codigoProduto("prod1")
 				.customizacao("Sem cebola")
 				.build());
 
 		itensPedido.add(CadastroItemPedidoDTO.builder()
-				.codigoProduto("PROD456")
+				.codigoProduto("prod2")
 				.customizacao("sem gelo")
 				.build());
 
