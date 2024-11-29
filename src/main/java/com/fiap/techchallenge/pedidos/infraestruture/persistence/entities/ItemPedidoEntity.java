@@ -35,4 +35,6 @@ public class ItemPedidoEntity {
 
 	private String produtoCodigo;
 
+	private String produtoNome;
+
 }

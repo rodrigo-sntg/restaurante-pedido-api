@@ -48,7 +48,7 @@ public class PedidoPresenterTest {
 
 	@Test
 	void shouldReturnValidDataWhenCreatePedidoPresenter() {
-		var item = new ItemPedido(null, "XPTO", new Preco(24.2), 10);
+		var item = new ItemPedido(null, "XPTO", new Preco(24.2), 10, "X-Salada");
 		var pedido = Pedido.builder()
 				.itens(List.of(item))
 				.dataCriacao(LocalDateTime.of(2024, 1, 1, 0, 0))
@@ -64,7 +64,7 @@ public class PedidoPresenterTest {
 
 	@Test
 	void shouldReturnValidDataWhenCreatePedidoPresenterWithoutClient() {
-		var item = new ItemPedido(null, "XPTO", new Preco(24.2), 10);
+		var item = new ItemPedido(null, "XPTO", new Preco(24.2), 10, "X-Salada");
 		var pedido = Pedido.builder()
 				.itens(List.of(item))
 				.dataCriacao(LocalDateTime.of(2024, 1, 1, 0, 0))

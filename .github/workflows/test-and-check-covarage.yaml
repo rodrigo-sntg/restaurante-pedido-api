@@ -9,7 +9,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     env:
-      EKS_CLUSTER_NAME: "my-cluster-1"  # Define the name of your EKS cluster here
+      EKS_CLUSTER_NAME: "my-cluster-1"  # Defina o nome do seu cluster EKS aqui
 
     steps:
       - name: Checkout code
@@ -28,33 +28,10 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-
-      - name: Install dependencies for coverage calculation
-        run: sudo apt-get update && sudo apt-get install -y libxml2-utils bc
-
       - name: Build and run tests with coverage check
         run: mvn clean verify -Dspring.profiles.active=test
         env:
           CI: true
-
-      - name: Extract current coverage percentage
-        id: coverage
-        shell: bash
-        run: |
-          LINE_COVERAGE=$(xmllint --xpath "string(//report/counter[@type='LINE']/@covered)" target/site/jacoco/jacoco.xml)
-          LINE_MISSED=$(xmllint --xpath "string(//report/counter[@type='LINE']/@missed)" target/site/jacoco/jacoco.xml)
-          if [[ -z "$LINE_COVERAGE" || -z "$LINE_MISSED" ]]; then
-            echo "Coverage data not found, defaulting to 0%"
-            echo "coverage=0" >> $GITHUB_ENV
-          else
-            TOTAL_LINES=$((LINE_COVERAGE + LINE_MISSED))
-            COVERAGE_PERCENTAGE=$(echo "scale=2; $LINE_COVERAGE * 100 / $TOTAL_LINES" | bc)
-            echo "Current Coverage: $COVERAGE_PERCENTAGE%"
-            echo "coverage=$COVERAGE_PERCENTAGE" >> $GITHUB_ENV
-          fi
-
-      - name: Display coverage
-        run: echo "Coverage percentage: 80%"
 
       - name: Upload test results
         if: always()
@@ -63,8 +40,52 @@ jobs:
           name: test-results
           path: target/surefire-reports/
 
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v4
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          name: coverage-report
-          path: target/site/jacoco/
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2  # Ajuste para a sua região AWS
+          role-to-assume: arn:aws:iam::058264063116:role/github-actions-role
+          role-session-name: github-actions-session
+
+      # Configuração do kubectl para autenticação no cluster EKS
+      - name: Configure kubectl
+        run: |
+          aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }} --region us-east-1
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+          EKS_CLUSTER_NAME: "my-cluster-1"  # Certifique-se de que o nome está correto
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./terraform
+
+      - name: Terraform Apply - Initial
+        run: terraform apply -auto-approve
+        working-directory: ./terraform
+
+      - name: Wait for Load Balancer URL
+        id: load-balancer
+        run: |
+          #!/bin/bash
+          LOAD_BALANCER_URL=$(terraform output -raw app_public_url 2>/dev/null)
+          while [ -z "$LOAD_BALANCER_URL" ]; do
+            echo "Aguardando a URL do LoadBalancer estar disponível..."
+            sleep 10
+            LOAD_BALANCER_URL=$(terraform output -raw app_public_url 2>/dev/null)
+          done
+          echo "Obtained Load Balancer URL: $LOAD_BALANCER_URL"
+          echo "LOAD_BALANCER_URL=$LOAD_BALANCER_URL" >> $GITHUB_ENV
+        working-directory: ./terraform
+
+      - name: Terraform Apply - Final
+        run: terraform apply -auto-approve -var="ngrok_url=http://${{ env.LOAD_BALANCER_URL }}"
+        working-directory: ./terraform

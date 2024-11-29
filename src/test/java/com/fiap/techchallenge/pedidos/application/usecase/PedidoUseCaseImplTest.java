@@ -307,6 +307,6 @@ public class PedidoUseCaseImplTest {
 
 	private ItemPedido getItemPedido(ProdutoDTO produto) {
 		return new ItemPedido(null, produto.getCodigo(), new Preco(produto.getPreco()),
-				produto.getTempoPreparoEmMinutos());
+				produto.getTempoPreparoEmMinutos(), produto.getNome());
 	}
 }

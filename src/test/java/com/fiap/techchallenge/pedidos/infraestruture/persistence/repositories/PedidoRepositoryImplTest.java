@@ -60,7 +60,7 @@ public class PedidoRepositoryImplTest {
 	class SalvarPedido {
 		@Test
 		void shouldPersistPedido_WhenSalvarPedidoIsCalled_WithValidData() {
-			var item = new ItemPedido(null, "XPTO", new Preco(24.2), 10);
+			var item = new ItemPedido(null, "XPTO", new Preco(24.2), 10, "X-Salada");
 			var pedido = Pedido.builder()
 					.itens(List.of(item))
 					.dataCriacao(LocalDateTime.of(2024, 1, 1, 0, 0))
@@ -95,7 +95,7 @@ public class PedidoRepositoryImplTest {
 
 		@Test
 		void shouldPersistPedido_WhenSalvarPedidoIsCalled_WithValidDataUsingCliente() {
-			var item = new ItemPedido(null, "XPTO", new Preco(24.2), 10);
+			var item = new ItemPedido(null, "XPTO", new Preco(24.2), 10, "X-Salada");
 			var pedido = Pedido.builder()
 					.itens(List.of(item))
 					.dataCriacao(LocalDateTime.of(2024, 1, 1, 0, 0))
@@ -137,7 +137,7 @@ public class PedidoRepositoryImplTest {
 
 		@Test
 		void shouldNotPersistPedido_WhenSalvarPedidoIsCalled_WithoutValidClienteData() {
-			var item = new ItemPedido(null, "XPTO", new Preco(24.2), 10);
+			var item = new ItemPedido(null, "XPTO", new Preco(24.2), 10, "X-Salada");
 
 			var pedido = Pedido.builder()
 					.itens(List.of(item))
@@ -183,7 +183,7 @@ public class PedidoRepositoryImplTest {
 					.status(StatusPedido.RECEBIDO)
 					.total(24d)
 					.build();
-			var item = new ItemPedido(null, "XPTO", new Preco(24.2), 10);
+			var item = new ItemPedido(null, "XPTO", new Preco(24.2), 10, "X-Salada");
 			var pedido = Pedido.builder()
 					.itens(List.of(item))
 					.dataCriacao(LocalDateTime.of(2024, 1, 1, 0, 0))
@@ -209,7 +209,7 @@ public class PedidoRepositoryImplTest {
 	class AtualizarStatusPedido {
 		@Test
 		void shouldAtualizarStatusPedido() {
-			var item = new ItemPedido(null, "XPTO", new Preco(24.2), 10);
+			var item = new ItemPedido(null, "XPTO", new Preco(24.2), 10, "X-Salada");
 			var pedido = Pedido.builder()
 					.itens(List.of(item))
 					.dataCriacao(LocalDateTime.of(2024, 1, 1, 0, 0))
@@ -245,7 +245,7 @@ public class PedidoRepositoryImplTest {
 	class DeletarStatusPedido {
 		@Test
 		void shouldDeleteStatusPedido() {
-			var item = new ItemPedido(null, "XPTO", new Preco(24.2), 10);
+			var item = new ItemPedido(null, "XPTO", new Preco(24.2), 10, "X-Salada");
 			var pedido = Pedido.builder()
 					.itens(List.of(item))
 					.dataCriacao(LocalDateTime.of(2024, 1, 1, 0, 0))

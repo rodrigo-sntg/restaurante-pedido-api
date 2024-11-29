@@ -61,7 +61,7 @@ public class CadastroPedidoUseCase {
 					"Produto com o id: " + cadastroItemPedidoDTO.getCodigoProduto() + " não localizado!");
 		Preco preco = new Preco(produto.getPreco());
 		return new ItemPedido(cadastroItemPedidoDTO.getCustomizacao(), cadastroItemPedidoDTO.getCodigoProduto(), preco,
-				produto.getTempoPreparoEmMinutos());
+				produto.getTempoPreparoEmMinutos(), produto.getNome());
 	}
 
 	public List<ItemPedido> toItemPedido(List<CadastroItemPedidoDTO> itensPedidoDTO) {
