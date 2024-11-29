@@ -9,15 +9,18 @@ public class ItemPedido {
 	private Preco preco;
 	private String codigoProduto;
 	private int tempoPreparo;
+	private String nomeProduto;
 
 	public ItemPedido(String customizacao, //
 			String codigoProduto, //
 			Preco preco, //
-			int tempoPreparo) {
+			int tempoPreparo,
+			String nomePedido) {
 		this.customizacao = customizacao;
 		this.codigoProduto = codigoProduto;
 		this.preco = preco;
 		this.tempoPreparo = tempoPreparo;
+		this.nomeProduto = nomePedido;
 	}
 
 	//	public ItemPedido(ProdutoNome nome, //

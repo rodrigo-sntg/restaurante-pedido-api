@@ -28,6 +28,7 @@ public class PagamentoExternalGatewayImpl implements PagamentoExternalGateway {
 						.customizacao(item.getCustomizacao())
 						.preco(converteParaCentavos(item.getPreco()
 								.getValor()))
+						.nome(item.getNomeProduto())
 						.build())
 				.toList();
 

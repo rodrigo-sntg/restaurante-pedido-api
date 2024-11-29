@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  mockoon:
+    build:
+      context: .
+      dockerfile: mockoon.dockerfile
+    container_name: mockoon
+    restart: always
+    ports:
+      - "9090:8080"
+    volumes:
+      - ./mock:/mockoon

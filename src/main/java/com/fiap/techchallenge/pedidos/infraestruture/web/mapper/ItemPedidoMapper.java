@@ -27,6 +27,7 @@ public class ItemPedidoMapper {
 				.preco(itemPedido.getValorItem())
 				.nome(produtoDTO.getNome())
 				.produtoCodigo(produtoDTO.getCodigo())
+				.produtoNome(produtoDTO.getNome())
 				.build();
 	}
 
@@ -49,6 +50,6 @@ public class ItemPedidoMapper {
 		}
 
 		return new ItemPedido(entity.getCustomizacao(), produtoDTO.getCodigo(), new Preco(produtoDTO.getPreco()),
-				produtoDTO.getTempoPreparoEmMinutos());
+				produtoDTO.getTempoPreparoEmMinutos(), produtoDTO.getNome());
 	}
 }

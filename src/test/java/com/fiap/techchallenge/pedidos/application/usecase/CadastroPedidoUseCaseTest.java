@@ -161,7 +161,7 @@ public class CadastroPedidoUseCaseTest {
 
 		var produto = getProduto();
 		var item = new ItemPedido(null, produto.getCodigo(), new Preco(produto.getPreco()),
-				produto.getTempoPreparoEmMinutos());
+				produto.getTempoPreparoEmMinutos(), "X-Salada");
 
 		var pedido = Pedido.builder()
 				.itens(List.of(item))
@@ -191,6 +191,6 @@ public class CadastroPedidoUseCaseTest {
 
 	private ItemPedido getItemPedido(ProdutoDTO produto) {
 		return new ItemPedido(null, produto.getCodigo(), new Preco(produto.getPreco()),
-				produto.getTempoPreparoEmMinutos());
+				produto.getTempoPreparoEmMinutos(), "X-Salada");
 	}
 }

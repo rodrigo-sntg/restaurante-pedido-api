@@ -39,7 +39,7 @@ public class ItemPedidoMapperTest {
 
 	@Test
 	void shouldReturnItemPedidoEntityFromDomain() {
-		var itemPedido = new ItemPedido("XPTO", "XPTO", new Preco(25d), 1);
+		var itemPedido = new ItemPedido("XPTO", "XPTO", new Preco(25d), 1, "X-Salada");
 
 		var produto = ProdutoDTO.builder()
 				.tempoPreparoEmMinutos(10)
@@ -57,7 +57,7 @@ public class ItemPedidoMapperTest {
 
 	@Test
 	void shouldThrowExceptionWhenMapperEntityNotFoundProduto() {
-		var itemPedido = new ItemPedido("XPTO", "XPTO", new Preco(25d), 1);
+		var itemPedido = new ItemPedido("XPTO", "XPTO", new Preco(25d), 1, "X-Salada");
 
 		when(produtoExternalGateway.buscarProdutoPeloCodigo(anyString())).thenReturn(null);
 
