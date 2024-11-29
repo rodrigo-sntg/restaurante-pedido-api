@@ -12,8 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 public class ProdutoExternalGatewayImplTest {
@@ -46,9 +45,10 @@ public class ProdutoExternalGatewayImplTest {
 				.codigo("XPTO")
 				.nome("X-Salada")
 				.build();
-		ResponseEntity responseEntity = new ResponseEntity<>(produto, null, 200);
 
-		when(restTemplate.getForEntity(anyString(), any())).thenReturn(responseEntity);
+		ResponseEntity<ProdutoDTO> responseEntity = ResponseEntity.ok(produto);
+
+		when(restTemplate.getForEntity(anyString(), eq(ProdutoDTO.class))).thenReturn(responseEntity);
 		when(externalApiRoutes.getProdutoApiUrl()).thenReturn("http://localhost:8080");
 
 		ProdutoDTO dto = produtoExternalGateway.buscarProdutoPeloCodigo("XPTO");
