@@ -43,7 +43,6 @@ public class PedidoRepositoryImpl implements PedidoRepository {
 					.orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado ao atrelar pedido!"));
 			entity.setCliente(cliente);
 		}
-
 		itemPedidoJpaRepository.saveAll(entity.getItens());
 		PedidoEntity saved = repository.save(entity);
 		entity.getItens()

@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  mockoon:
+    build:
+      context: .
+      dockerfile: mockoon.dockerfile
+    container_name: produto-mock
+    restart: always
+    ports:
+      - "9090:8080"
+    volumes:
+      - ./mock:/mockoon
+  
+  pedidos-test:
+    container_name: pedidos-test
+    build:
+        context: .
+        dockerfile: Dockerfile
+    ports:
+        - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=test
+      - PRODUTO_API_URL=http://produto-mock:8080
+      # - PAGAMENTO_API_URL=http://mockoon/8080
+    depends_on:
+      - mockoon

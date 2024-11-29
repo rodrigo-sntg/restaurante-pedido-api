@@ -6,6 +6,7 @@ import com.fiap.techchallenge.pedidos.infraestruture.web.externalapi.ProdutoExte
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootTest
@@ -22,7 +23,7 @@ public class CucumberSpringConfiguration {
 	}
 
 	@Bean
-	public ProdutoExternalGateway produtoExternalGateway(){
+	public ProdutoExternalGateway produtoExternalGateway() {
 		return new ProdutoExternalGatewayImpl(restTemplate, externalApiRoutes);
 	}
 }
