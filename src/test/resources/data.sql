@@ -1,1 +1,0 @@
-insert into clientes (nome, cpf, email) values ('João Belarmino da Silva Sauro', '409.265.000-07', 'joao_belarmino@email.com');
