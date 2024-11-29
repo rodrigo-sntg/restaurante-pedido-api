@@ -22,10 +22,10 @@ import java.util.Map;
 @ControllerAdvice
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-	@ExceptionHandler(CPFOuEmailObrigatorioException.class)
-	protected ResponseEntity<Object> handleCpfOuEmailObrigatorio(CPFOuEmailObrigatorioException ex) {
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-	}
+//	@ExceptionHandler(CPFOuEmailObrigatorioException.class)
+//	protected ResponseEntity<Object> handleCpfOuEmailObrigatorio(CPFOuEmailObrigatorioException ex) {
+//		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+//	}
 
 	/**
 	 * Manipula exceções de argumentos de método não válidos.
@@ -33,16 +33,16 @@ public class GlobalExceptionHandler {
 	 * @param ex A exceção capturada.
 	 * @return Uma resposta de erro com status HTTP 400.
 	 */
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
-		Map<String, String> errors = new HashMap<>();
-		ex.getBindingResult().getAllErrors().forEach(error -> {
-			String fieldName = ((FieldError) error).getField();
-			String errorMessage = error.getDefaultMessage();
-			errors.put(fieldName, errorMessage);
-		});
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
-	}
+//	@ExceptionHandler(MethodArgumentNotValidException.class)
+//	public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
+//		Map<String, String> errors = new HashMap<>();
+//		ex.getBindingResult().getAllErrors().forEach(error -> {
+//			String fieldName = ((FieldError) error).getField();
+//			String errorMessage = error.getDefaultMessage();
+//			errors.put(fieldName, errorMessage);
+//		});
+//		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+//	}
 
 	/**
 	 * Manipula exceções genéricas de tempo de execução.
@@ -63,10 +63,10 @@ public class GlobalExceptionHandler {
 	 * @param request O contexto da requisição web.
 	 * @return Uma resposta de erro com status HTTP 500.
 	 */
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<String> handleGeneralException(Exception ex, WebRequest request) {
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno no servidor: " + ex.getMessage());
-	}
+//	@ExceptionHandler(Exception.class)
+//	public ResponseEntity<String> handleGeneralException(Exception ex, WebRequest request) {
+//		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno no servidor: " + ex.getMessage());
+//	}
 
 	/**
 	 * Manipula exceções de falha de conversão de tipo de argumento.
@@ -124,10 +124,10 @@ public class GlobalExceptionHandler {
 	 * @param e A exceção capturada.
 	 * @return Uma resposta de erro com status HTTP 400.
 	 */
-	@ExceptionHandler(CPFInvalidoException.class)
-	public ResponseEntity<String> handleCPFInvalido(CPFInvalidoException e) {
-		return ResponseEntity.badRequest().body(e.getMessage());
-	}
+//	@ExceptionHandler(CPFInvalidoException.class)
+//	public ResponseEntity<String> handleCPFInvalido(CPFInvalidoException e) {
+//		return ResponseEntity.badRequest().body(e.getMessage());
+//	}
 
 	@ExceptionHandler(ClienteNaoEncontradoException.class)
 	protected ResponseEntity<Object> handleClienteNaoEncontrado(ClienteNaoEncontradoException ex) {

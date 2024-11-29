@@ -62,7 +62,7 @@ public class ClienteApiTest {
 
 			when(clienteController.criarCliente(any(ClienteDTO.class))).thenReturn(clienteModelView);
 
-			mockMvc.perform(post("/clientes")
+			mockMvc.perform(post("/api/clientes")
 							.contentType(MediaType.APPLICATION_JSON)
 							.content(JsonHelper.asJsonString(clienteDTO)))
 					.andExpect(status().isOk())
@@ -76,7 +76,7 @@ public class ClienteApiTest {
 			when(clienteController.criarCliente(any(ClienteDTO.class))).thenThrow(
 					new RuntimeException("Expected failure."));
 
-			mockMvc.perform(post("/clientes").contentType(MediaType.APPLICATION_JSON)
+			mockMvc.perform(post("/api/clientes").contentType(MediaType.APPLICATION_JSON)
 							.content("{\"nome\":\"Elão dos Foguete\",\"cpf\":\"12345678909\",\"email\":\"email@domain.com\"}"))
 					.andExpect(status().isInternalServerError());
 		}
@@ -86,7 +86,7 @@ public class ClienteApiTest {
 			when(clienteController.criarCliente(any(ClienteDTO.class))).thenThrow(
 					new RuntimeException("Internal server error"));
 
-			mockMvc.perform(post("/clientes").contentType(MediaType.APPLICATION_JSON)
+			mockMvc.perform(post("/api/clientes").contentType(MediaType.APPLICATION_JSON)
 							.content("{\"nome\":\"Test\",\"cpf\":\"98041680062\",\"email\":\"test@example.com\"}"))
 					.andExpect(status().isInternalServerError())
 					.andExpect(content().string(containsString("Internal server error")));
@@ -97,7 +97,7 @@ public class ClienteApiTest {
 			when(clienteController.criarCliente(any(ClienteDTO.class))).thenThrow(
 					new DataIntegrityViolationException("Erro interno no servidor."));
 
-			mockMvc.perform(post("/clientes").contentType(MediaType.APPLICATION_JSON)
+			mockMvc.perform(post("/api/clientes").contentType(MediaType.APPLICATION_JSON)
 							.content("{\"nome\":\"Test\",\"cpf\":\"98041680062\",\"email\":\"test@example.com\"}"))
 					.andExpect(
 							status().isInternalServerError()) // Verifying if status is 500 due to internal server error
@@ -116,7 +116,7 @@ public class ClienteApiTest {
 			cliente2.setNome("John Doe");
 			when(clienteController.buscarClientes()).thenReturn(Arrays.asList(cliente1, cliente2));
 
-			mockMvc.perform(get("/clientes"))
+			mockMvc.perform(get("/api/clientes"))
 					.andExpect(status().isOk())
 					.andExpect(jsonPath("$", hasSize(2)))
 					.andExpect(jsonPath("$[0].nome").value("Elão dos Foguete"))
@@ -127,7 +127,7 @@ public class ClienteApiTest {
 		void shouldReturnEmptyList_WhenNoClientesAreFound() throws Exception {
 			when(clienteController.buscarClientes()).thenReturn(Arrays.asList());
 
-			mockMvc.perform(get("/clientes"))
+			mockMvc.perform(get("/api/clientes"))
 					.andExpect(status().isOk())
 					.andExpect(jsonPath("$", hasSize(0)));
 		}
@@ -138,7 +138,7 @@ public class ClienteApiTest {
 
 //		@Test
 		void shouldReturnBadRequest_WhenValidationFails() throws Exception {
-			mockMvc.perform(post("/clientes").contentType(MediaType.APPLICATION_JSON)
+			mockMvc.perform(post("/api/clientes").contentType(MediaType.APPLICATION_JSON)
 							.content(
 									"{\"nome\":\"Elão dos Foguete\",\"cpf\":\"invalid\",\"email\":\"invalid\"}")) // intentionally bad data
 					.andExpect(status().isBadRequest());
@@ -149,7 +149,7 @@ public class ClienteApiTest {
 			when(clienteController.criarCliente(any(ClienteDTO.class))).thenThrow(
 					new NegativeArraySizeException("Erro interno no servidor: Unexpected error"));
 
-			mockMvc.perform(post("/clientes").contentType(MediaType.APPLICATION_JSON)
+			mockMvc.perform(post("/api/clientes").contentType(MediaType.APPLICATION_JSON)
 							.content("{\"nome\":\"Elão dos Foguete\",\"cpf\":\"12345678909\",\"email\":\"email@domain.com\"}"))
 					.andExpect(status().isInternalServerError())
 					.andExpect(content().string(containsString("Erro interno no servidor: Unexpected error")));
@@ -160,7 +160,7 @@ public class ClienteApiTest {
 			when(clienteController.criarCliente(any(ClienteDTO.class))).thenThrow(
 					new DataIntegrityViolationException("uk_cpf"));
 
-			mockMvc.perform(post("/clientes").contentType(MediaType.APPLICATION_JSON)
+			mockMvc.perform(post("/api/clientes").contentType(MediaType.APPLICATION_JSON)
 							.content("{\"nome\":\"Elão dos Foguete\",\"cpf\":\"12345678909\",\"email\":\"email@domain.com\"}"))
 					.andExpect(status().isConflict())
 					.andExpect(content().string(containsString("Erro: O CPF já está cadastrado.")));
@@ -171,7 +171,7 @@ public class ClienteApiTest {
 			when(clienteController.criarCliente(any(ClienteDTO.class))).thenThrow(
 					new DataIntegrityViolationException("uk_email"));
 
-			mockMvc.perform(post("/clientes").contentType(MediaType.APPLICATION_JSON)
+			mockMvc.perform(post("/api/clientes").contentType(MediaType.APPLICATION_JSON)
 							.content("{\"nome\":\"Elão dos Foguete\",\"cpf\":\"12345678909\",\"email\":\"email@domain.com\"}"))
 					.andExpect(status().isConflict())
 					.andExpect(content().string(containsString("Erro: O Email já está cadastrado.")));
@@ -179,7 +179,7 @@ public class ClienteApiTest {
 
 		@Test
 		void shouldReturnBadRequest_WhenHttpMessageNotReadable() throws Exception {
-			mockMvc.perform(post("/clientes").contentType(MediaType.APPLICATION_JSON)
+			mockMvc.perform(post("/api/clientes").contentType(MediaType.APPLICATION_JSON)
 							.content("{malformed json")) // Intentionally malformed JSON
 					.andExpect(status().isBadRequest())
 					.andExpect(content().string(containsString("Erro de leitura do JSON")));
@@ -188,7 +188,7 @@ public class ClienteApiTest {
 //		@Test
 		void shouldReturnBadRequest_WhenCPFInvalido() throws Exception {
 
-			mockMvc.perform(post("/clientes").contentType(MediaType.APPLICATION_JSON)
+			mockMvc.perform(post("/api/clientes").contentType(MediaType.APPLICATION_JSON)
 							.content("{\"nome\":\"Elão dos Foguete\",\"cpf\":\"12345678901\",\"email\":\"email@domain.com\"}"))
 					.andExpect(status().isBadRequest())
 					.andExpect(content().string(containsString("CPF inválido")));
@@ -199,7 +199,7 @@ public class ClienteApiTest {
 			when(clienteController.criarCliente(any(ClienteDTO.class))).thenThrow(
 					new RuntimeException("Erro interno no servidor"));
 
-			mockMvc.perform(post("/clientes").contentType(MediaType.APPLICATION_JSON)
+			mockMvc.perform(post("/api/clientes").contentType(MediaType.APPLICATION_JSON)
 							.content("{\"nome\":\"Elão dos Foguete\",\"cpf\":\"12345678909\",\"email\":\"email@domain.com\"}"))
 					.andExpect(status().isInternalServerError())
 					.andExpect(content().string(containsString("Erro interno no servidor")));
@@ -213,7 +213,7 @@ public class ClienteApiTest {
 			when(clienteController.criarCliente(any(ClienteDTO.class))).thenThrow(ex);
 
 			// Perform the request and verify outcomes
-			mockMvc.perform(post("/clientes").contentType(MediaType.APPLICATION_JSON)
+			mockMvc.perform(post("/api/clientes").contentType(MediaType.APPLICATION_JSON)
 							.content(
 									"{\"nome\":\"Elão dos Foguete\",\"cpf\":\"12345678909\",\"email\":\"email@domain.com\"}")) // Data that does not trigger NumberFormatException
 					.andExpect(status().isBadRequest())

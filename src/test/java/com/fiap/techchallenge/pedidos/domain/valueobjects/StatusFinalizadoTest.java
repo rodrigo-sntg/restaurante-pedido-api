@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class StatusFinalizadoTest {
+
 	@Test
 	void shouldThrowsExceptionWhenProximoStatusIsCalled() {
 		var pedido = Pedido.builder()

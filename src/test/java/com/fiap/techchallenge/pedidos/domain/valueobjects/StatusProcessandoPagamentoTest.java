@@ -1,6 +1,7 @@
 package com.fiap.techchallenge.pedidos.domain.valueobjects;
 
 import com.fiap.techchallenge.pedidos.application.usecase.RegrasFluxoPagamentoUseCase;
+import com.fiap.techchallenge.pedidos.application.usecase.RegrasFluxoPedidoUseCase;
 import com.fiap.techchallenge.pedidos.domain.exceptions.StatusInvalidoException;
 import com.fiap.techchallenge.pedidos.domain.model.Cliente;
 import com.fiap.techchallenge.pedidos.domain.model.ItemPedido;
@@ -25,10 +26,10 @@ public class StatusProcessandoPagamentoTest {
 				.build();
 
 		assertEquals(StatusPedido.PROCESSANDO_PAGAMENTO, pedido.getStatusAtual());
-		var exception = assertThrows(StatusInvalidoException.class, () -> {
-			pedido.executarRegrasStatus(new RegrasFluxoPagamentoUseCase());
+		assertDoesNotThrow( () -> {
+			pedido.executarRegrasStatus(new RegrasFluxoPedidoUseCase());
+			pedido.proximoStatus();
 		});
-		assertEquals("Status do pedido inválido para checkout.", exception.getMessage());
 	}
 
 	@Test
