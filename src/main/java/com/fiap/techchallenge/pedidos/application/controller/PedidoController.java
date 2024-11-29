@@ -1,6 +1,8 @@
 package com.fiap.techchallenge.pedidos.application.controller;
 
 import com.fiap.techchallenge.pedidos.application.controller.dto.CadastroPedidoDTO;
+import com.fiap.techchallenge.pedidos.application.controller.dto.CheckoutDTO;
+import com.fiap.techchallenge.pedidos.application.controller.dto.PedidoCheckoutDTO;
 import com.fiap.techchallenge.pedidos.application.controller.dto.PedidoDTO;
 
 import java.util.List;
@@ -22,4 +24,6 @@ public interface PedidoController {
 //	boolean atualizarStatusPedidoPago(OrderResponseInputData orderResponse);
 
 	PedidoDTO voltarStatus(String codigo);
+
+	CheckoutDTO checkout(String codigo);
 }

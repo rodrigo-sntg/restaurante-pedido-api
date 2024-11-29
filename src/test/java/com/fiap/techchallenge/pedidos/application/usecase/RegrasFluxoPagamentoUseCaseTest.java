@@ -32,14 +32,4 @@ public class RegrasFluxoPagamentoUseCaseTest {
 
 		assertEquals(messagemException, exception.getMessage());
 	}
-
-	@Test
-	void shouldNotThrowsExceptionWhenAStatusProcessandoPagamento() {
-		var regrasCheckout = new RegrasFluxoPagamentoUseCase();
-		assertDoesNotThrow(() -> {
-			regrasCheckout.executarRegras(Pedido.builder()
-					.statusPedido(new StatusProcessandoPagamento())
-					.build());
-		});
-	}
 }

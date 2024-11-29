@@ -2,8 +2,8 @@ package com.fiap.techchallenge.pedidos.infraestruture.web.api;
 
 import com.fiap.techchallenge.pedidos.application.controller.PedidoController;
 import com.fiap.techchallenge.pedidos.application.controller.dto.CadastroPedidoDTO;
+import com.fiap.techchallenge.pedidos.application.controller.dto.CheckoutDTO;
 import com.fiap.techchallenge.pedidos.application.controller.dto.PedidoDTO;
-import com.fiap.techchallenge.pedidos.domain.exceptions.PedidoInvalidoException;
 import com.fiap.techchallenge.pedidos.domain.exceptions.PedidoNaoEncontradoException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/pedidos")
+@RequestMapping("api/pedidos")
 @Validated
 public class PedidoApi {
 	private final PedidoController pedidoController;
@@ -101,6 +101,15 @@ public class PedidoApi {
 			@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos") })
 	public ResponseEntity<PedidoDTO> voltarStatus(@PathVariable("codigo") String codigo) {
 		var pedido = pedidoController.voltarStatus(codigo);
+		return ResponseEntity.ok(pedido);
+	}
+
+	@PatchMapping("/{codigo}/checkout")
+	@Operation(summary = "Retorna o status do pedido", description = "Retorna o objeto com a informação atualizada", responses = {
+			@ApiResponse(responseCode = "200", description = "Retorna o status do pedido", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class), examples = @ExampleObject(name = "Exemplo de Pedido com Status Revertido", value = "{\"codigo\": \"PED123\", \"status\": \"EM_ELABORACAO\", \"itens\": [{\"customizacao\": \"Sem cebola\", \"codigoProduto\": \"PROD123\"}], \"cpf\": \"12345678900\"}"))),
+			@ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos") })
+	public ResponseEntity<CheckoutDTO> fazerCheckout(@PathVariable("codigo") String codigo) {
+		var pedido = pedidoController.checkout(codigo);
 		return ResponseEntity.ok(pedido);
 	}
 }

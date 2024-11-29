@@ -1,6 +1,7 @@
 package com.fiap.techchallenge.pedidos.domain.valueobjects;
 
 import com.fiap.techchallenge.pedidos.application.usecase.RegrasFluxoPagamentoUseCase;
+import com.fiap.techchallenge.pedidos.domain.exceptions.StatusInvalidoException;
 import com.fiap.techchallenge.pedidos.domain.model.Cliente;
 import com.fiap.techchallenge.pedidos.domain.model.ItemPedido;
 import com.fiap.techchallenge.pedidos.domain.model.Pedido;
@@ -9,8 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class StatusProcessandoPagamentoTest {
 	@Test
@@ -25,10 +25,10 @@ public class StatusProcessandoPagamentoTest {
 				.build();
 
 		assertEquals(StatusPedido.PROCESSANDO_PAGAMENTO, pedido.getStatusAtual());
-		assertDoesNotThrow(() -> {
+		var exception = assertThrows(StatusInvalidoException.class, () -> {
 			pedido.executarRegrasStatus(new RegrasFluxoPagamentoUseCase());
-			pedido.proximoStatus();
 		});
+		assertEquals("Status do pedido inválido para checkout.", exception.getMessage());
 	}
 
 	@Test

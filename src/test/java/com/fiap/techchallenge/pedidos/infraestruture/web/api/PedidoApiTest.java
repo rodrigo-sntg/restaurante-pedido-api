@@ -3,6 +3,7 @@ package com.fiap.techchallenge.pedidos.infraestruture.web.api;
 import com.fiap.techchallenge.pedidos.application.controller.PedidoController;
 import com.fiap.techchallenge.pedidos.application.controller.dto.CadastroItemPedidoDTO;
 import com.fiap.techchallenge.pedidos.application.controller.dto.CadastroPedidoDTO;
+import com.fiap.techchallenge.pedidos.application.controller.dto.CheckoutDTO;
 import com.fiap.techchallenge.pedidos.application.controller.dto.ItemPedidoDTO;
 import com.fiap.techchallenge.pedidos.application.controller.dto.PedidoDTO;
 import com.fiap.techchallenge.pedidos.infraestruture.web.exception.GlobalExceptionHandler;
@@ -33,7 +34,7 @@ public class PedidoApiTest {
 	private MockMvc mockMvc;
 	@Mock
 	private PedidoController pedidoController;
-	private static final String BASE_URL = "/pedidos";
+	private static final String BASE_URL = "/api/pedidos";
 	private AutoCloseable openMocks;
 
 	@BeforeEach
@@ -191,6 +192,30 @@ public class PedidoApiTest {
 					.andExpect(jsonPath("$.total").value("24.4"))
 					.andExpect(jsonPath("$.itens[0].nomeProduto").value("X-Salada"))
 					.andExpect(jsonPath("$.itens[0].preco").value("24.4"));
+		}
+	}
+
+	@Nested
+	class FazerCheckout {
+		@Test
+		void shouldDeletePedido() throws Exception {
+			var codigo = "XPTO";
+			var checkout = CheckoutDTO.builder()
+					.id(1L)
+					.payment("CREDIT_CARD")
+					.paymentUrl("http://pagamento-url.com")
+					.referenceId("XPTO")
+					.checkoutId("XPTO")
+					.build();
+			when(pedidoController.checkout(any(String.class))).thenReturn(checkout);
+
+			mockMvc.perform(patch(BASE_URL + "/{codigo}/checkout", codigo))
+					.andExpect(status().isOk())
+					.andExpect(jsonPath("$.id").value("1"))
+					.andExpect(jsonPath("$.payment").value("CREDIT_CARD"))
+					.andExpect(jsonPath("$.paymentUrl").value("http://pagamento-url.com"))
+					.andExpect(jsonPath("$.referenceId").value("XPTO"))
+					.andExpect(jsonPath("$.checkoutId").value("XPTO"));
 		}
 	}
 

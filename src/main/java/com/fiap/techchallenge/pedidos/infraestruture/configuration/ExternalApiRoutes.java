@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 public class ExternalApiRoutes {
 	@Value("${pagamento.api-url}")
-	String pagseguroApiUrl;
+	String pagamentoApiUrl;
 
 	@Value("${produto.api_url}")
 	private String produtoApiUrl;

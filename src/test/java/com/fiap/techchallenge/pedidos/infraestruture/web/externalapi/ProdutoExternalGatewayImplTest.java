@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -50,7 +49,7 @@ public class ProdutoExternalGatewayImplTest {
 		ResponseEntity responseEntity = new ResponseEntity<>(produto, null, 200);
 
 		when(restTemplate.getForEntity(anyString(), any())).thenReturn(responseEntity);
-		when(externalApiRoutes.getProdutoApiUrl()).thenReturn("http://localhost:8080/produtos");
+		when(externalApiRoutes.getProdutoApiUrl()).thenReturn("http://localhost:8080");
 
 		ProdutoDTO dto = produtoExternalGateway.buscarProdutoPeloCodigo("XPTO");
 
