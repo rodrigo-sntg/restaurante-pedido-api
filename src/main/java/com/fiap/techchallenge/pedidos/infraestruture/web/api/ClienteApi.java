@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/clientes")
+@RequestMapping("api/clientes")
 @Validated
 public class ClienteApi {
 	private final ClienteController clienteController;
