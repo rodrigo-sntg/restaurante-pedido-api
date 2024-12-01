@@ -43,6 +43,7 @@ public class PedidoSteps {
 
 	@Quando("eu confirmo o pedido")
 	public void eu_confirmo_o_pedido() {
+
 		pedido = CadastroPedidoDTO.builder()
 				.cpf(cpf)
 				.itens(itensPedido)
