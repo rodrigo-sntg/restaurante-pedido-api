@@ -8,6 +8,22 @@ Este é um serviço de pagamento desenvolvido em Spring Boot, O projeto é modul
 - Maven 3.6 ou superior
 - Docker (para testes com containers, opcional)
 
+## Testes Unitários
+![image](files/coverage.png)
+
+## BDD
+![image](files/bdd.png)
+
+## Bloqueio Master
+![image](files/bloqueio.jpeg)
+
+## Pipeline
+Visualize [aqui](.github/workflows/test-and-check-covarage.yaml) o arquivo de configuração da pipeline.
+![image](files/pipeline1.png)
+![image](files/pipeline2.png)
+![image](files/pipeline3.png)
+
+
 1. **Clone o repositório**:
     ```bash
     git clone https://github.com/seu-usuario/repositorio.git
